@@ -1,13 +1,39 @@
+import 'package:fast_chat_app/auth/service.dart';
 import 'package:fast_chat_app/components/my_button.dart';
 import 'package:fast_chat_app/components/my_text_field.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   Function()? onTap;
   LoginPage({super.key, required this.onTap});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
+
   TextEditingController passwordController = TextEditingController();
+
+  void login() async {
+    // get instance of auth service
+    final AuthService authService = AuthService();
+    // try login
+    try {
+      await authService.signInWithEmailAndPassword(
+          emailController.text, passwordController.text);
+    }
+    // display error
+    catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text(e.toString()),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +87,7 @@ class LoginPage extends StatelessWidget {
                 children: [
                   const Text("Don't have and account? "),
                   GestureDetector(
-                    onTap: onTap,
+                    onTap: widget.onTap,
                     child: const Text(
                       "Register here!",
                       style: TextStyle(fontWeight: FontWeight.bold),
@@ -74,7 +100,7 @@ class LoginPage extends StatelessWidget {
                 height: size.aspectRatio * 50,
               ),
 
-              MyButton(onTap: () {}, buttonText: "LOGIN"),
+              MyButton(onTap: login, buttonText: "LOGIN"),
             ],
           ),
         ),

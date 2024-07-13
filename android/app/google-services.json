@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1011427377144",
+    "project_id": "fast-chat-app-3b4de",
+    "storage_bucket": "fast-chat-app-3b4de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1011427377144:android:29ce4e23970f534c05200d",
+        "android_client_info": {
+          "package_name": "com.example.fast_chat_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzaAM4eh9nAg5Len30DCZpucR5BCc8HYA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
