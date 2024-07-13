@@ -1,4 +1,4 @@
-import 'package:fast_chat_app/auth/login_or_register.dart';
+import 'package:fast_chat_app/services/auth/login_or_register.dart';
 import 'package:fast_chat_app/pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

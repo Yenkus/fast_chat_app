@@ -1,4 +1,6 @@
-import 'package:fast_chat_app/auth/service.dart';
+import 'package:fast_chat_app/components/my_drawer.dart';
+import 'package:fast_chat_app/components/my_drawer_tile.dart';
+import 'package:fast_chat_app/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -9,20 +11,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void logout() {
-    final _authService = AuthService();
-    _authService.signOut();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(onPressed: logout, icon: const Icon(Icons.logout))
-        ],
-      ),
+      appBar: AppBar(),
       backgroundColor: Theme.of(context).colorScheme.surface,
+      drawer: const MyDrawer(),
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:fast_chat_app/auth/service.dart';
+import 'package:fast_chat_app/services/auth/auth_service.dart';
 import 'package:fast_chat_app/components/my_button.dart';
 import 'package:fast_chat_app/components/my_text_field.dart';
 import 'package:flutter/material.dart';
@@ -12,16 +12,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   void login() async {
     // get instance of auth service
-    final AuthService _authService = AuthService();
+    final AuthService authService = AuthService();
     // try login
     try {
-      await _authService.signInWithEmailAndPassword(
+      await authService.signInWithEmailAndPassword(
           _emailController.text, _passwordController.text);
     }
     // display error
