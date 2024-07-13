@@ -7,9 +7,10 @@ class RegisterPage extends StatelessWidget {
   Function()? onTap;
   RegisterPage({super.key, required this.onTap});
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   void displayError(
       {required BuildContext context, required String errorMessage}) {
@@ -25,17 +26,19 @@ class RegisterPage extends StatelessWidget {
     AuthService authService = AuthService();
 
     // try to create account
-    if (passwordController.text == confirmPasswordController.text) {
+    if (_passwordController.text == _confirmPasswordController.text) {
       try {
         authService.signUpWithEmailAndPassword(
-            emailController.text, passwordController.text);
+            _emailController.text, _passwordController.text);
       }
 
-      // display error
+      // display error from failing to create an account
       catch (e) {
         displayError(context: context, errorMessage: e.toString());
       }
-    } else {
+    }
+    // display error to user that passwords don't match
+    else {
       displayError(context: context, errorMessage: "Passwords don't match");
     }
   }
@@ -69,7 +72,7 @@ class RegisterPage extends StatelessWidget {
 
               // Email address textfield
               MyTextField(
-                  textEditingController: emailController, hintText: "Email"),
+                  textEditingController: _emailController, hintText: "Email"),
 
               SizedBox(
                 height: size.aspectRatio * 50,
@@ -77,7 +80,7 @@ class RegisterPage extends StatelessWidget {
 
               // password textfield
               MyTextField(
-                textEditingController: passwordController,
+                textEditingController: _passwordController,
                 hintText: "Password",
                 obscureText: true,
               ),
@@ -87,7 +90,7 @@ class RegisterPage extends StatelessWidget {
               ),
               // password textfield
               MyTextField(
-                textEditingController: confirmPasswordController,
+                textEditingController: _confirmPasswordController,
                 hintText: "Confirm Password",
                 obscureText: true,
               ),

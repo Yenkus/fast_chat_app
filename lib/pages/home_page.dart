@@ -10,8 +10,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   void logout() {
-    final authService = AuthService();
-    authService.signOut();
+    final _authService = AuthService();
+    _authService.signOut();
   }
 
   @override

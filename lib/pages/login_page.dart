@@ -12,17 +12,17 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController emailController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
 
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
   void login() async {
     // get instance of auth service
-    final AuthService authService = AuthService();
+    final AuthService _authService = AuthService();
     // try login
     try {
-      await authService.signInWithEmailAndPassword(
-          emailController.text, passwordController.text);
+      await _authService.signInWithEmailAndPassword(
+          _emailController.text, _passwordController.text);
     }
     // display error
     catch (e) {
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
 
               // Email address textfield
               MyTextField(
-                  textEditingController: emailController, hintText: "Email"),
+                  textEditingController: _emailController, hintText: "Email"),
 
               SizedBox(
                 height: size.aspectRatio * 50,
@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
 
               // password textfield
               MyTextField(
-                textEditingController: passwordController,
+                textEditingController: _passwordController,
                 hintText: "Password",
                 obscureText: true,
               ),
