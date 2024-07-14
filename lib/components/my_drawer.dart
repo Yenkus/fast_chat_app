@@ -13,38 +13,42 @@ class MyDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const DrawerHeader(
-          child: Icon(
-            Icons.message,
-            size: 40,
+    return Drawer(
+      child: Column(
+        children: [
+          const DrawerHeader(
+            child: Icon(
+              Icons.message,
+              size: 40,
+            ),
           ),
-        ),
-        MyDrawerTile(
-          icon: Icons.home,
-          title: "H O M E",
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        MyDrawerTile(
-          icon: Icons.settings,
-          title: "S E T T I N G S",
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const SettingsPage()));
-          },
-        ),
-        const Spacer(),
-        MyDrawerTile(
-          icon: Icons.logout,
-          title: "L O G O U T",
-          onTap: logout,
-          bottomPadding: 10,
-        ),
-      ],
+          MyDrawerTile(
+            icon: Icons.home,
+            title: "H O M E",
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          MyDrawerTile(
+            icon: Icons.settings,
+            title: "S E T T I N G S",
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SettingsPage()));
+            },
+          ),
+          const Spacer(),
+          MyDrawerTile(
+            icon: Icons.logout,
+            title: "L O G O U T",
+            onTap: logout,
+            bottomPadding: 10,
+          ),
+        ],
+      ),
     );
   }
 }
