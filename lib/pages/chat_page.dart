@@ -4,20 +4,15 @@ import 'package:fast_chat_app/services/auth/auth_service.dart';
 import 'package:fast_chat_app/services/chat_services/chat_service.dart';
 import 'package:flutter/material.dart';
 
-class ChatPage extends StatefulWidget {
+class ChatPage extends StatelessWidget {
   final String receiverEmail;
   final String receiverID;
-  const ChatPage({
+  ChatPage({
     super.key,
     required this.receiverEmail,
     required this.receiverID,
   });
 
-  @override
-  State<ChatPage> createState() => _ChatPageState();
-}
-
-class _ChatPageState extends State<ChatPage> {
   // text editing controller
   final TextEditingController _messageController = TextEditingController();
 
@@ -31,8 +26,7 @@ class _ChatPageState extends State<ChatPage> {
     // if there is something inside the textfield
     if (_messageController.text.isNotEmpty) {
       // send message
-      await _chatService.sendMessage(
-          widget.receiverID, _messageController.text);
+      await _chatService.sendMessage(receiverID, _messageController.text);
 
       // clear the controller
       _messageController.clear();
@@ -43,7 +37,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.receiverEmail),
+        title: Text(receiverEmail),
       ),
       body: Column(
         children: [
@@ -61,7 +55,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget _buildMessageList() {
     String senderID = _authService.getCurrentUser()!.uid;
     return StreamBuilder(
-        stream: _chatService.getMessages(widget.receiverID, senderID),
+        stream: _chatService.getMessages(receiverID, senderID),
         builder: (context, snapshot) {
           // errors
           if (snapshot.hasError) {
@@ -85,7 +79,14 @@ class _ChatPageState extends State<ChatPage> {
   Widget _buildMessageItem(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
-    return Text(data["message"]);
+    // is current user
+    bool isCurrentUser = data["senderID"] == _authService.getCurrentUser()!.uid;
+
+    // align message to the right if sender is the current user, otherwise left
+    Alignment alignment =
+        isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
+
+    return Container(alignment: alignment, child: Text(data["message"]));
   }
 
   // build message input
