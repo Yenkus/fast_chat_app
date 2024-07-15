@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fast_chat_app/components/chat_bubble.dart';
 import 'package:fast_chat_app/components/my_text_field.dart';
 import 'package:fast_chat_app/services/auth/auth_service.dart';
 import 'package:fast_chat_app/services/chat_services/chat_service.dart';
@@ -38,6 +39,9 @@ class ChatPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(receiverEmail),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        foregroundColor: Colors.grey,
       ),
       body: Column(
         children: [
@@ -76,6 +80,14 @@ class ChatPage extends StatelessWidget {
         });
   }
 
+  // void testSomething() {
+  //   final senderID = _authService.getCurrentUser()!.uid;
+  //   StreamBuilder(
+  //       stream: _chatService.getMessages(receiverID, senderID), builder: (context, snapshot) {
+  //         return ListView(children: snapshot.data!.docs.map((doc) => Text(doc.data()!["message"])).toList());
+  //       });
+  // }
+
   Widget _buildMessageItem(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
@@ -86,24 +98,44 @@ class ChatPage extends StatelessWidget {
     Alignment alignment =
         isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
 
-    return Container(alignment: alignment, child: Text(data["message"]));
+    return Column(
+      crossAxisAlignment:
+          isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: [
+        ChatBubble(
+            message: data["message"],
+            isCurrentUser: isCurrentUser,
+            alignment: alignment),
+      ],
+    );
   }
 
   // build message input
   Widget _buildUserInput() {
-    return Row(children: [
-      // textfield should take up most of the space
-      Expanded(
-        child: MyTextField(
-            textEditingController: _messageController,
-            hintText: "Type a message"),
-      ),
+    return Padding(
+      padding: const EdgeInsets.all(50.0),
+      child: Row(children: [
+        // textfield should take up most of the space
+        Expanded(
+          child: MyTextField(
+              textEditingController: _messageController,
+              hintText: "Type a message"),
+        ),
 
-      // send button
-      IconButton(
-        onPressed: () => sendMessage(),
-        icon: const Icon(Icons.send),
-      ),
-    ]);
+        // send button
+        Container(
+          decoration:
+              const BoxDecoration(color: Colors.green, shape: BoxShape.circle),
+          margin: const EdgeInsets.only(left: 25),
+          child: IconButton(
+            onPressed: () => sendMessage(),
+            icon: const Icon(
+              Icons.send,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ]),
+    );
   }
 }
