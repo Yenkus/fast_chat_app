@@ -5,15 +5,20 @@ import 'package:fast_chat_app/services/auth/auth_service.dart';
 import 'package:fast_chat_app/services/chat_services/chat_service.dart';
 import 'package:flutter/material.dart';
 
-class ChatPage extends StatelessWidget {
+class ChatPage extends StatefulWidget {
   final String receiverEmail;
   final String receiverID;
-  ChatPage({
+  const ChatPage({
     super.key,
     required this.receiverEmail,
     required this.receiverID,
   });
 
+  @override
+  State<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
   // text editing controller
   final TextEditingController _messageController = TextEditingController();
 
@@ -22,23 +27,70 @@ class ChatPage extends StatelessWidget {
 
   final AuthService _authService = AuthService();
 
+  // fot textfield focus
+  FocusNode myFocusNode = FocusNode();
+
+  // add listener to focus node
+  @override
+  void initState() {
+    super.initState();
+
+    myFocusNode.addListener(() {
+      if (myFocusNode.hasFocus) {
+        // cause a delay so that the keyboard has time to show up
+        // then the amount of remaining space will be calculated,
+        // then scroll down
+        Future.delayed(
+          const Duration(milliseconds: 500),
+          () => scrollDown(),
+        );
+      }
+    });
+
+    // wait a bit for listView to be built, then scrolll to bottom
+    Future.delayed(
+      const Duration(milliseconds: 500),
+      () => scrollDown(),
+    );
+  }
+
+  @override
+  void dispose() {
+    myFocusNode.dispose();
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  // scroll controller
+  final ScrollController _scrollController = ScrollController();
+  void scrollDown() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
   // send message
   void sendMessage() async {
     // if there is something inside the textfield
     if (_messageController.text.isNotEmpty) {
       // send message
-      await _chatService.sendMessage(receiverID, _messageController.text);
+      await _chatService.sendMessage(
+          widget.receiverID, _messageController.text);
 
       // clear the controller
       _messageController.clear();
     }
+
+    scrollDown();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(receiverEmail),
+        title: Text(widget.receiverEmail),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: Colors.grey,
@@ -59,7 +111,7 @@ class ChatPage extends StatelessWidget {
   Widget _buildMessageList() {
     String senderID = _authService.getCurrentUser()!.uid;
     return StreamBuilder(
-        stream: _chatService.getMessages(receiverID, senderID),
+        stream: _chatService.getMessages(widget.receiverID, senderID),
         builder: (context, snapshot) {
           // errors
           if (snapshot.hasError) {
@@ -73,6 +125,7 @@ class ChatPage extends StatelessWidget {
 
           // return message
           return ListView(
+            controller: _scrollController,
             children: snapshot.data!.docs
                 .map((doc) => _buildMessageItem(doc))
                 .toList(),
@@ -81,13 +134,6 @@ class ChatPage extends StatelessWidget {
   }
 
   // void testSomething() {
-  //   final senderID = _authService.getCurrentUser()!.uid;
-  //   StreamBuilder(
-  //       stream: _chatService.getMessages(receiverID, senderID), builder: (context, snapshot) {
-  //         return ListView(children: snapshot.data!.docs.map((doc) => Text(doc.data()!["message"])).toList());
-  //       });
-  // }
-
   Widget _buildMessageItem(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
@@ -113,13 +159,21 @@ class ChatPage extends StatelessWidget {
   // build message input
   Widget _buildUserInput() {
     return Padding(
-      padding: const EdgeInsets.all(50.0),
+      padding: const EdgeInsets.all(25.0),
       child: Row(children: [
         // textfield should take up most of the space
+        // TODO: check if the textfield border is rounded and then delete this comment
         Expanded(
-          child: MyTextField(
-              textEditingController: _messageController,
-              hintText: "Type a message"),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: MyTextField(
+                focusNode: myFocusNode,
+                textEditingController: _messageController,
+                textCapitalization: TextCapitalization.sentences,
+                hintText: "Type a message"),
+          ),
         ),
 
         // send button

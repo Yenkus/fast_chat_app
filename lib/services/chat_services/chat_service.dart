@@ -7,7 +7,7 @@ class ChatService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final AuthService _authService = AuthService();
 
-  // get user stream
+  // GET ALL USER STREAM
   Stream<List<Map<String, dynamic>>> getUserStream() {
     return _firestore.collection("Users").snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
@@ -20,7 +20,9 @@ class ChatService {
     });
   }
 
-  // send message
+  // GET ALL USERS STREAM EXCEPT BLOCKED USERS
+
+  // SEND MESSAGE
   Future<void> sendMessage(String receiverID, message) async {
     // get current user info
     // you can also call the firebase auth instance to get the current user details
@@ -49,7 +51,7 @@ class ChatService {
         .add(newMessage.toMap());
   }
 
-  // get message
+  // GET MESSAGE
   Stream<QuerySnapshot> getMessages(String userID, otherUserID) {
     // construct a chatroom ID fot the two users
     List<String> ids = [userID, otherUserID];
@@ -63,4 +65,26 @@ class ChatService {
         .orderBy("timestamp", descending: false)
         .snapshots();
   }
+
+  // REPORT USER
+  Future<void> reportUser(String message, String userID) async {
+    String currentUser = _authService.getCurrentUser()!.uid;
+    final report = {
+      'reportedBy': currentUser,
+      'message': message,
+      'userID': userID,
+      'timeStamp': Timestamp.now(),
+    };
+
+    await _firestore.collection('Reports').add(report);
+  }
+
+  // BLOCK USER
+  Future<void> blockUser(String userID) async {
+    // await _firestore.collection('BlockUser').add(userID);
+  }
+
+  // UNBLOCK USER
+
+  // GET BLOCKED USERS STREAM
 }

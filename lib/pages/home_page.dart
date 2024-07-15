@@ -17,6 +17,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: const Text("FastChat"),
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: Colors.grey,
