@@ -33,7 +33,7 @@ class BlockedUsersPage extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text("User unblocked!")));
                   },
-                  child: const Text("Cancel"),
+                  child: const Text("Unblock"),
                 ),
               ],
             ));
@@ -76,14 +76,16 @@ class BlockedUsersPage extends StatelessWidget {
             }
 
             // load complete
-            return ListView.builder(itemBuilder: (context, index) {
-              final user = blockedUsers[index];
+            return ListView.builder(
+                itemCount: blockedUsers.length,
+                itemBuilder: (context, index) {
+                  final user = blockedUsers[index];
 
-              return UserTile(
-                text: user['email'],
-                onTap: () => _showUnblockBox(context, user['uid']),
-              );
-            });
+                  return UserTile(
+                    text: user['email'],
+                    onTap: () => _showUnblockBox(context, user['uid']),
+                  );
+                });
           }),
     );
   }

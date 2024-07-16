@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
 
           // loading...
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           }
 
           // return list view

@@ -153,7 +153,7 @@ class _ChatPageState extends State<ChatPage> {
           isCurrentUser: isCurrentUser,
           alignment: alignment,
           messageId: doc.id,
-          userId: data['SenderID'],
+          userId: data['senderID'],
         ),
       ],
     );
