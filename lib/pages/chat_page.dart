@@ -149,9 +149,12 @@ class _ChatPageState extends State<ChatPage> {
           isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: [
         ChatBubble(
-            message: data["message"],
-            isCurrentUser: isCurrentUser,
-            alignment: alignment),
+          message: data["message"],
+          isCurrentUser: isCurrentUser,
+          alignment: alignment,
+          messageId: doc.id,
+          userId: data['SenderID'],
+        ),
       ],
     );
   }
@@ -162,7 +165,6 @@ class _ChatPageState extends State<ChatPage> {
       padding: const EdgeInsets.all(25.0),
       child: Row(children: [
         // textfield should take up most of the space
-        // TODO: check if the textfield border is rounded and then delete this comment
         Expanded(
           child: Container(
             decoration: BoxDecoration(

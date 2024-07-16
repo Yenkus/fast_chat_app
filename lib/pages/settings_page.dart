@@ -1,3 +1,4 @@
+import 'package:fast_chat_app/pages/blocked_users_page.dart';
 import 'package:fast_chat_app/themes/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class _SettingsPageState extends State<SettingsPage> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Column(
         children: [
+          // dark mode
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.secondary,
@@ -46,6 +48,35 @@ class _SettingsPageState extends State<SettingsPage> {
                       activeColor: Colors.green,
                       value: themeProvider.isDarkMode,
                       onChanged: (value) => themeProvider.toggleTheme()),
+                ),
+              ],
+            ),
+          ),
+
+          // show block user
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.secondary,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.all(25),
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // title
+                const Text("Blocked Users"),
+
+                // switch toggle
+                IconButton(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => BlockedUsersPage()),
+                  ),
+                  icon: Icon(
+                    Icons.arrow_forward_rounded,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ],
             ),

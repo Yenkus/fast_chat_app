@@ -30,16 +30,17 @@ class HomePage extends StatelessWidget {
 
   Widget _buildUserList() {
     return StreamBuilder(
-        stream: _chatService.getUserStream(),
+        // stream: _chatService.getUserStream(),
+        stream: _chatService.getUsersExcludingBlocked(),
         builder: (context, snapshot) {
           // error
           if (snapshot.hasError) {
-            return const Text("Error");
+            return const Center(child: Text("Error"));
           }
 
           // loading...
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text("Loading...");
+            return const CircularProgressIndicator();
           }
 
           // return list view
